@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html ng-app="MyApp" lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title ng-bind="appName">ʕ◔ϖ◔ʔ</title>
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1"/>
+
+  <!-- bower:css -->
+  <link rel="stylesheet" href="libraries/angular-material.css">
+  <link rel="stylesheet" href="libraries/font-awesome.css">
+  <!-- endinject -->
+  <!-- inject:css -->
+  <link rel="stylesheet" href="styles/hover.css">
+  <link rel="stylesheet" href="styles/menu.css">
+  <!-- endinject -->
+</head>
+<body ng-controller="MainCtrl as ctrl" layout="row">
+
+<md-sidenav class="md-sidenav-left md-whiteframe-z2" style="width: 400px;"
+            md-component-id="left" md-is-locked-open="$media('gt-sm')" layout-fill>
+
+  <md-toolbar>
+    <h1 class="md-toolbar-tools" ng-bind="appName">The Uploader</h1>
+  </md-toolbar>
+
+  <md-content class="md-padding" layout-fill>
+    <ng-file-drop
+        class="md-whiteframe-z1"
+        style="height: 300px"
+        layout="column" layout-align="center center"
+
+        ng-model="ctrl.files"
+        ng-multiple="false"
+        accept="image/*"
+        allow-dir="false">
+      <div> Drop file here</div>
+    </ng-file-drop>
+    <div layout layout-align="end center">
+      Or...
+      <button class="md-raised"
+              ng-file-select
+              ng-model="ctrl.files"
+              ng-multiple="false"
+              accept="image/*">
+        Click here
+      </button>
+    </div>
+
+    <md-card class="layer-parent" layout layout-fill
+             ng-repeat="file in ctrl.files">
+      <div>
+        <img ng-src="{{ file.dataUrl }}" ng-show="file.dataUrl"
+             style="width: 100%;height:100%"/>
+      </div>
+
+      <div class="hover" layout="row" layout-align="space-around center"
+           style="width:100%;height: 100%">
+        <div ng-show="!file.isUploading" layout="row" layout-align="space-around center">
+          <md-button class="md-fab md-warn" aria-label="Cancel"
+                     ng-disabled="file.isUploading"
+                     ng-click="ctrl.onCancel($index)">
+            <i class="fa fa-remove"></i>
+            <md-tooltip>
+              Cancel
+            </md-tooltip>
+          </md-button>
+
+          <md-button class="md-fab md-primary" aria-label="Upload"
+                     ng-disabled="file.isUploading"
+                     ng-click="ctrl.onUpload($index)">
+            <i class="fa fa-cloud-upload"></i>
+            <md-tooltip>
+              Upload
+            </md-tooltip>
+          </md-button>
+        </div>
+
+        <md-progress-circular
+            md-mode="determinate"
+            value="{{file.progress}}"
+            ng-show="file.isUploading">
+        </md-progress-circular>
+      </div>
+    </md-card>
+
+  </md-content>
+</md-sidenav>
+
+<div layout="column" layout-fill role="main">
+
+  <md-toolbar layout="column" hide-gt-sm>
+    <div class="md-toolbar-tools" ng-click="ctrl.openMenu()" flex layout="column">
+      <h1 layout="row" flex>
+        <button class="menu-icon" aria-label="Toggle Menu">
+          <i class="fa fa-bars" style="color: #ffffff"></i>
+        </button>
+
+        {{ appName }}
+      </h1>
+    </div>
+  </md-toolbar>
+
+  <!--  コンテンツ -->
+  <div masonry load-images="true" preserve-order="true">
+    <div
+        ng-show="ctrl.images.length > 0"
+        ng-repeat="image in ctrl.images track by $index"
+        class="masonry-brick"
+        style="margin: 3px;">
+
+      <img ng-src="{{ image.url }}" alt="{{ image.fileName }}"
+           class="md-whiteframe-z2"
+           style="max-width: 300px"
+           clip-copy="image.url"/>
+
+    </div>
+  </div>
+
+  <!-- エラー画面にこだわるな -->
+  <div ng-show="ctrl.isError" class="md-whiteframe-z2"
+       style="height: 100%;"
+       layout layout-align="center center">
+    <strong class="md-warn">エラー:情報を取得できませんでした。</strong>
+  </div>
+
+</div>
+
+<script src="./bower_components/jquery/dist/jquery.js"></script>
+<script src="./bower_components/jquery-bridget/jquery.bridget.js"></script>
+<script src="./bower_components/get-style-property/get-style-property.js"></script>
+<script src="./bower_components/get-size/get-size.js"></script>
+<script src="./bower_components/eventEmitter/EventEmitter.js"></script>
+<script src="./bower_components/eventie/eventie.js"></script>
+<script src="./bower_components/doc-ready/doc-ready.js"></script>
+<script src="./bower_components/matches-selector/matches-selector.js"></script>
+<script src="./bower_components/outlayer/item.js"></script>
+<script src="./bower_components/outlayer/outlayer.js"></script>
+<script src="./bower_components/masonry/masonry.js"></script>
+<script src="./bower_components/imagesloaded/imagesloaded.js"></script>
+
+<script src="./bower_components/angular/angular.js"></script>
+<script src="./bower_components/ng-file-upload/angular-file-upload.js"></script>
+<script src="./bower_components/angular-animate/angular-animate.js"></script>
+<script src="./bower_components/angular-aria/angular-aria.js"></script>
+<script src="./bower_components/hammerjs/hammer.js"></script>
+<script src="./bower_components/angular-material/angular-material.js"></script>
+<script src="./bower_components/lodash/dist/lodash.compat.js"></script>
+<script src="./bower_components/restangular/dist/restangular.js"></script>
+<script src="./bower_components/zeroclipboard/dist/ZeroClipboard.js"></script>
+<script src="./bower_components/ng-clip/dest/ng-clip.min.js"></script>
+<script src="./bower_components/angular-masonry/angular-masonry.js"></script>
+<!-- _____bower:js -->
+<!-- endinject -->
+
+<!-- inject:js -->
+<script src="scripts/app.js"></script>
+<!-- endinject -->
+
+</body>
+</html>

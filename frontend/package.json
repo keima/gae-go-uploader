@@ -1,0 +1,17 @@
+{
+  "name": "gae-go-uploader-frontend",
+  "version": "0.0.0",
+  "description": "",
+  "private": true,
+  "devDependencies": {
+    "bower-files": "^2.2.1",
+    "coffee-script": "^1.8.0",
+    "gulp": "^3.8.10",
+    "gulp-angular-filesort": "^1.0.4",
+    "gulp-debug": "^1.0.1",
+    "gulp-flatten": "0.0.4",
+    "gulp-inject": "^1.0.2",
+    "main-bower-files": "^2.4.1",
+    "run-sequence": "^1.0.2"
+  }
+}

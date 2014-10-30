@@ -1,0 +1,9 @@
+.layer-parent {
+    position: relative;
+}
+
+.layer-parent div.hover {
+    position: absolute;
+    top: 0;
+    left:0;
+}
