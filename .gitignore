@@ -23,3 +23,10 @@ _testmain.go
 *.test
 *.prof
 .idea
+frontend/node_modules
+
+# ignore private key
+*.pem
+*.p12
+frontend/app/libraries
+frontend/app/fonts

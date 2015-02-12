@@ -1,0 +1,39 @@
+{
+  "name": "frontend",
+  "version": "0.0.0",
+  "homepage": "https://github.com/keima/gae-go-uploader",
+  "authors": [
+    "Kouta Imanaka <keima@p-side.net>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.3.7",
+    "ng-file-upload": "~2.0.5",
+    "angular-material": "~0.6.1",
+    "components-font-awesome": "~4.2.0",
+    "restangular": "~1.4.0",
+    "zeroclipboard": "~2.2.0",
+    "ng-clip": "~0.2.5",
+    "angular-masonry": "~0.11.0",
+    "jquery-bridget": "~1.1.0"
+  },
+  "__ignore__": {
+    "material-design-iconic-font": "~1.1.1"
+  },
+  "overrides": {
+    "components-font-awesome": {
+      "main": [
+        "css/font-awesome.css",
+        "./fonts/*"
+      ]
+    }
+  }
+}
