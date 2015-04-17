@@ -9,26 +9,21 @@ import (
 )
 
 func init() {
-	handler := rest.ResourceHandler{
-		PreRoutingMiddlewares: []rest.Middleware{
-			&MyMiddleware{},
-		},
-	}
+	api := rest.NewApi()
+	api.Use(rest.DefaultDevStack...)
 
 	//@formatter:off
-	err := handler.SetRoutes(
-		&rest.Route{"GET", "/api/v1/images", routes.GetImageList},
-		//		&rest.Route{"GET",    "/api/images/#id", GetImage},
-		//		&rest.Route{"DELETE", "/api/images/#id", DeleteImage},
+	router, err := rest.MakeRouter(
+		rest.Get("/api/v1/images", routes.GetImageList),
 	)
 	//@formatter:on
 
 	if err != nil {
 		log.Fatal(err)
 	}
+	api.SetApp(router)
 
 	http.HandleFunc("/api/upload", routes.PostImageHandler)
 	http.HandleFunc("/api/show/", routes.RedirectBlobStore)
-
-	http.Handle("/", &handler)
+	http.Handle("/", api.MakeHandler())
 }
