@@ -6,6 +6,7 @@ api_version: go1
 handlers:
 - url: /api/.*
   script: _go_app
+  login: admin
 - url: /
   static_files: static/index.html
   upload: /
