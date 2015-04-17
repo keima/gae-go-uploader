@@ -5,7 +5,7 @@ import (
 	"strconv"
 
 	"github.com/keima/gae-go-uploader/goapp/settings"
-	"github.com/knightso/base/gae/model"
+	"github.com/knightso/base/gae/ds"
 
 	"appengine"
 	"appengine/blobstore"
@@ -18,7 +18,7 @@ var regExpMatchFileName = regexp.MustCompile(`\/gs\/.+\/(.+)`)
 
 // Image model class and orm functions
 type Image struct {
-	model.Meta
+	ds.Meta
 	Id       string `datastore:"-" json:"id"`
 	Url      string `datastore:"-" json:"url"`
 	FilePath string `json:"filePath"`
@@ -28,13 +28,13 @@ type Image struct {
 func (item *Image) Save(c appengine.Context) error {
 	key := datastore.NewIncompleteKey(c, kindName, nil)
 	item.SetKey(key)
-	return model.Put(c, item)
+	return ds.Put(c, item)
 }
 
 func (item *Image) Load(c appengine.Context, keyName string) error {
 	key := datastore.NewKey(c, kindName, keyName, 0, nil)
 
-	if err := model.Get(c, key, item); err != nil {
+	if err := ds.Get(c, key, item); err != nil {
 		return err
 	}
 
@@ -47,7 +47,7 @@ func LoadList(c appengine.Context, offset int, limit int) (*[]Image, error) {
 	items := make([]Image, 0, limit)
 	q := datastore.NewQuery(kindName).Order("-UpdatedAt").Offset(offset).Limit(limit)
 
-	if err := model.ExecuteQuery(c, q, &items); err != nil {
+	if err := ds.ExecuteQuery(c, q, &items); err != nil {
 		return nil, err
 	}
 
