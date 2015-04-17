@@ -11,14 +11,6 @@ import (
 	"github.com/keima/gae-go-uploader/goapp/settings"
 )
 
-// go-json-rest から持ってきた
-type responseWriter struct {
-	http.ResponseWriter
-	wroteHeader bool
-	isIndented  bool
-	xPoweredBy  string
-}
-
 // PostImageHandler は画像アップロードを取り扱うハンドラー。
 // multipart/form-data を扱うため、go-json-restは使用しない
 func PostImageHandler(w http.ResponseWriter, r *http.Request) {
