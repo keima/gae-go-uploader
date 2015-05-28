@@ -2,7 +2,7 @@
 
 angular.module('MyApp', [
   'restangular',
-  'angularFileUpload',
+  'ngFileUpload',
   'ngMaterial',
   'ngClipboard',
   'wu.masonry'
@@ -15,7 +15,7 @@ angular.module('MyApp', [
 }]).run(function ($rootScope) {
   $rootScope.appName = "The Uploader ʕ◔ϖ◔ʔ";
 
-}).controller('MainCtrl', function ($window, $timeout, $scope, $upload, Restangular, $mdSidenav) {
+}).controller('MainCtrl', function ($window, $timeout, $scope, Upload, Restangular, $mdSidenav) {
   var self = this;
 
   var fileReaderSupported = $window.FileReader != null && ($window.FileAPI == null || FileAPI.html5 != false);
@@ -33,33 +33,6 @@ angular.module('MyApp', [
   }
   init();
 
-  $scope.$watch(function () {
-    return self.files; // this is array
-  }, function (files) {
-    if (!Array.isArray(files) || files.length == 0) return;
-    console.log(files);
-
-    files.forEach(function (file) {
-      generateThumb(file);
-    });
-  });
-
-  function generateThumb(file) {
-    if (file != null) {
-      if (fileReaderSupported && file.type.indexOf('image') > -1) {
-        $timeout(function () {
-          var fileReader = new FileReader();
-          fileReader.readAsDataURL(file);
-          fileReader.onload = function (e) {
-            $timeout(function () {
-              file.dataUrl = e.target.result;
-            });
-          }
-        });
-      }
-    }
-  }
-
   this.openMenu = function () {
     $mdSidenav('left').toggle();
   };
@@ -72,7 +45,7 @@ angular.module('MyApp', [
     var file = self.files[index];
     file.isUploading = true;
 
-    $scope.upload = $upload.upload({
+    $scope.upload = Upload.upload({
       url: '/api/upload',
       method: 'POST',
       file: file,
@@ -82,7 +55,6 @@ angular.module('MyApp', [
     }).success(function (data, status, headers, config) {
       self.files.splice(index, 1);
       $timeout(init, 3000);
-
     }).error(function () {
       file.isUploading = false;
     });

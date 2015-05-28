@@ -6,8 +6,8 @@
   <meta name="viewport" content="initial-scale=1, maximum-scale=1"/>
 
   <!-- bower:css -->
-  <link rel="stylesheet" href="libraries/angular-material.css">
-  <link rel="stylesheet" href="libraries/font-awesome.css">
+  <link rel="stylesheet" href="bower_components/angular-material/angular-material.css">
+  <link rel="stylesheet" href="bower_components/components-font-awesome/css/font-awesome.css">
   <!-- endinject -->
   <!-- inject:css -->
   <link rel="stylesheet" href="styles/hover.css">
@@ -17,40 +17,33 @@
 <body ng-controller="MainCtrl as ctrl" layout="row">
 
 <md-sidenav class="md-sidenav-left md-whiteframe-z2" style="width: 400px;"
-            md-component-id="left" md-is-locked-open="$media('gt-sm')" layout-fill>
+            md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')" layout-fill>
 
   <md-toolbar>
     <h1 class="md-toolbar-tools" ng-bind="appName">The Uploader</h1>
   </md-toolbar>
 
   <md-content class="md-padding" layout-fill>
-    <ng-file-drop
+    <div ngf-drop ngf-select
         class="md-whiteframe-z1"
         style="height: 300px"
         layout="column" layout-align="center center"
 
         ng-model="ctrl.files"
-        ng-multiple="false"
-        accept="image/*"
-        allow-dir="false">
-      <div> Drop file here</div>
-    </ng-file-drop>
-    <div layout layout-align="end center">
-      Or...
-      <button class="md-raised"
-              ng-file-select
-              ng-model="ctrl.files"
-              ng-multiple="false"
-              accept="image/*">
-        Click here
-      </button>
+        ngf-multiple="false"
+        ngf-allow-dir="false"
+        ngf-accept="'image/*'"
+        >
+      <div>
+        ここにファイルを移動<br>
+        もしくはクリックでファイル選択
+      </div>
     </div>
 
     <md-card class="layer-parent" layout layout-fill
              ng-repeat="file in ctrl.files">
       <div>
-        <img ng-src="{{ file.dataUrl }}" ng-show="file.dataUrl"
-             style="width: 100%;height:100%"/>
+        <img ngf-src="file" style="width: 100%;height:100%"/>
       </div>
 
       <div class="hover" layout="row" layout-align="space-around center"
@@ -125,31 +118,29 @@
 
 </div>
 
-<script src="./bower_components/jquery/dist/jquery.js"></script>
-<script src="./bower_components/jquery-bridget/jquery.bridget.js"></script>
-<script src="./bower_components/get-style-property/get-style-property.js"></script>
-<script src="./bower_components/get-size/get-size.js"></script>
-<script src="./bower_components/eventEmitter/EventEmitter.js"></script>
-<script src="./bower_components/eventie/eventie.js"></script>
-<script src="./bower_components/doc-ready/doc-ready.js"></script>
-<script src="./bower_components/matches-selector/matches-selector.js"></script>
-<script src="./bower_components/outlayer/item.js"></script>
-<script src="./bower_components/outlayer/outlayer.js"></script>
-<script src="./bower_components/masonry/masonry.js"></script>
-<script src="./bower_components/imagesloaded/imagesloaded.js"></script>
-
-<script src="./bower_components/angular/angular.js"></script>
-<script src="./bower_components/ng-file-upload/angular-file-upload.js"></script>
-<script src="./bower_components/angular-animate/angular-animate.js"></script>
-<script src="./bower_components/angular-aria/angular-aria.js"></script>
-<script src="./bower_components/hammerjs/hammer.js"></script>
-<script src="./bower_components/angular-material/angular-material.js"></script>
-<script src="./bower_components/lodash/dist/lodash.compat.js"></script>
-<script src="./bower_components/restangular/dist/restangular.js"></script>
-<script src="./bower_components/zeroclipboard/dist/ZeroClipboard.js"></script>
-<script src="./bower_components/ng-clip/dest/ng-clip.min.js"></script>
-<script src="./bower_components/angular-masonry/angular-masonry.js"></script>
-<!-- _____bower:js -->
+<!-- bower:js -->
+<script src="bower_components/jquery/dist/jquery.js"></script>
+<script src="bower_components/jquery-bridget/jquery.bridget.js"></script>
+<script src="bower_components/get-style-property/get-style-property.js"></script>
+<script src="bower_components/get-size/get-size.js"></script>
+<script src="bower_components/eventie/eventie.js"></script>
+<script src="bower_components/doc-ready/doc-ready.js"></script>
+<script src="bower_components/eventEmitter/EventEmitter.js"></script>
+<script src="bower_components/matches-selector/matches-selector.js"></script>
+<script src="bower_components/outlayer/item.js"></script>
+<script src="bower_components/outlayer/outlayer.js"></script>
+<script src="bower_components/masonry/masonry.js"></script>
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/imagesloaded/imagesloaded.js"></script>
+<script src="bower_components/angular-masonry/angular-masonry.js"></script>
+<script src="bower_components/ng-file-upload/ng-file-upload.js"></script>
+<script src="bower_components/angular-animate/angular-animate.js"></script>
+<script src="bower_components/angular-aria/angular-aria.js"></script>
+<script src="bower_components/angular-material/angular-material.js"></script>
+<script src="bower_components/lodash/lodash.js"></script>
+<script src="bower_components/restangular/dist/restangular.js"></script>
+<script src="bower_components/zeroclipboard/dist/ZeroClipboard.js"></script>
+<script src="bower_components/ng-clip/src/ngClip.js"></script>
 <!-- endinject -->
 
 <!-- inject:js -->
