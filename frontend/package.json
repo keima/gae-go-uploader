@@ -4,14 +4,14 @@
   "description": "",
   "private": true,
   "devDependencies": {
-    "bower-files": "^2.2.1",
-    "coffee-script": "^1.8.0",
-    "gulp": "^3.8.10",
-    "gulp-angular-filesort": "^1.0.4",
-    "gulp-debug": "^1.0.1",
+    "bower-files": "^3.7.0",
+    "coffee-script": "^1.9.2",
+    "gulp": "^3.8.11",
+    "gulp-angular-filesort": "^1.1.1",
+    "gulp-debug": "^2.0.1",
     "gulp-flatten": "0.0.4",
-    "gulp-inject": "^1.0.2",
-    "main-bower-files": "^2.4.1",
-    "run-sequence": "^1.0.2"
+    "gulp-inject": "^1.2.0",
+    "main-bower-files": "^2.8.0",
+    "run-sequence": "^1.1.0"
   }
 }

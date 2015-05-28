@@ -1,6 +1,6 @@
 gulp = require "gulp"
 inject = require "gulp-inject"
-bower = require "bower-files"
+bower = require("bower-files")()
 runSequence = require "run-sequence"
 angularFileSort = require "gulp-angular-filesort"
 browserSync = require 'browser-sync'
@@ -41,10 +41,10 @@ gulp.task 'bower-inject', ->
   runSequence 'bower', 'inject'
 
 gulp.task 'bower', ->
-  jsLib = bower(ext: 'js')
-  cssLib = bower(ext: 'css')
-  swfLib = bower(ext: 'swf')
-  fontLib = bower(join: {fonts: ['eot', 'woff', 'svg', 'ttf']}).fonts
+  jsLib = bower.ext('js').files
+  cssLib = bower.ext('css').files
+  swfLib = bower.ext('swf').files
+  fontLib = bower.join({fonts: ['eot', 'woff', 'svg', 'ttf']}).files
 
   gulp.src(jsLib)
   .pipe debug()
@@ -56,10 +56,10 @@ gulp.task 'bower', ->
 gulp.task 'inject', ->
   target = gulp.src(setting.src + 'index.html')
 
-  bowerComponents = bower(join: {fonts: ['eot', 'woff', 'svg', 'ttf']})
+  bowerComponents = bower.join({fonts: ['eot', 'woff', 'svg', 'ttf']})
 
-  bowerJs = gulp.src(bowerComponents.js)
-  bowerCss = gulp.src(bowerComponents.css)
+  bowerJs = gulp.src(bowerComponents.ext('js').files)
+  bowerCss = gulp.src(bowerComponents.ext('css').files)
   others = gulp.src [
     setting.src + 'scripts/**/*.js',
     setting.src + 'styles/**/*.css'
