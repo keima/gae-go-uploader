@@ -6,38 +6,35 @@ import (
 	"time"
 
 	"appengine"
-	"appengine/file"
+	"golang.org/x/net/context"
+	"google.golang.org/cloud/storage"
+	"fmt"
+	"github.com/keima/gae-go-uploader/goapp/settings"
 )
 
 // ファイルを保存し、/gs/で始まるファイルパスを返す
-func DirectStore(c appengine.Context, data []byte, fileHeader *multipart.FileHeader) (absFilename string, err error) {
-	opts := &file.CreateOptions{
-		MIMEType: fileHeader.Header.Get("Content-Type"),
-	}
+func DirectStore(c appengine.Context, ctx context.Context, data []byte, fileHeader *multipart.FileHeader) (string, error) {
+	bucketName := settings.GCS_DEFAULT_BUCKET_NAME
+	fileName := generateFileName()
 
-	wc, absFilename, err := file.Create(c, generateFileName(), opts)
-	if err != nil {
+	c.Infof("Save: /gs/%s/%s", bucketName, fileName)
+
+	wc := storage.NewWriter(ctx, bucketName, fileName)
+	wc.ContentType = fileHeader.Header.Get("Content-Type")
+	if _, err := wc.Write(data); err != nil {
 		return "", err
 	}
-	defer wc.Close()
-
-	_, err = wc.Write(data)
-	if err != nil {
+	if err := wc.Close(); err != nil {
 		return "", err
 	}
 
-	return absFilename, nil
-}
-
-// DefaultBucketNameを返す
-func DefaultBucketName(c appengine.Context) (string, error) {
-	bucketName, err := file.DefaultBucketName(c)
-	if err != nil {
-		return "", err
-	}
-	return bucketName, nil
+	return absFileName(bucketName, fileName), nil
 }
 
 func generateFileName() string {
 	return strconv.FormatInt(time.Now().UnixNano(), 10)
+}
+
+func absFileName(bucketName, filename string) string {
+	return fmt.Sprintf("/gs/%s/%s", bucketName, filename)
 }

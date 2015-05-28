@@ -6,4 +6,7 @@ const (
 
 	// 一般公開用URLパス
 	GCS_PUBLIC_ACCESS_PATH = "http://storage.googleapis.com/keima-uploader.appspot.com/"
+
+	// バケット名
+	GCS_DEFAULT_BUCKET_NAME = "keima-uploader.appspot.com"
 )

@@ -6,15 +6,29 @@ import (
 	"net/http"
 
 	"appengine"
+	newappengine "google.golang.org/appengine"
 
 	"github.com/keima/gae-go-uploader/goapp/models"
 	"github.com/keima/gae-go-uploader/goapp/settings"
+	"appengine/urlfetch"
+	"google.golang.org/cloud/storage"
+	"golang.org/x/oauth2"
+	"golang.org/x/oauth2/google"
+	"google.golang.org/cloud"
 )
 
 // PostImageHandler は画像アップロードを取り扱うハンドラー。
 // multipart/form-data を扱うため、go-json-restは使用しない
 func PostImageHandler(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
+	newc := newappengine.NewContext(r)
+	hc := &http.Client{
+		Transport: &oauth2.Transport{
+			Source: google.AppEngineTokenSource(newc, storage.ScopeFullControl),
+			Base:   &urlfetch.Transport{Context: c},
+		},
+	}
+	ctx := cloud.NewContext(appengine.AppID(c), hc)
 
 	w.Header().Set("Content-Type", "application/json")
 
@@ -42,9 +56,9 @@ func PostImageHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	absFilename, err := DirectStore(c, data, fileHeader)
+	absFilename, err := DirectStore(c, ctx, data, fileHeader)
 	if err != nil {
-		c.Errorf("%s", err.Error())
+		c.Errorf("DirectStore: %s", err.Error())
 		httpError(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

@@ -8,7 +8,6 @@ import (
 	"github.com/knightso/base/gae/ds"
 
 	"appengine"
-	"appengine/blobstore"
 	"appengine/datastore"
 )
 
@@ -63,14 +62,6 @@ func LoadList(c appengine.Context, offset int, limit int) (*[]Image, error) {
 // AbstractFilePath は filePath で与えられた /gs/... で始まるパスから、
 // 実際にアクセス可能なURLを返却します。
 func AbstractFilePath(c appengine.Context, filePath string) string {
-	if appengine.IsDevAppServer() {
-		key, err := blobstore.BlobKeyForFile(c, filePath)
-		if err != nil {
-			return ""
-		}
-
-		return "http://" + appengine.DefaultVersionHostname(c) + "/api/show/?blobKey=" + string(key)
-	}
 	return settings.GCS_PUBLIC_ACCESS_PATH + fileName(filePath)
 }
 
