@@ -1,25 +1,29 @@
 package routes
 
 import (
-	"mime/multipart"
-	"strconv"
-	"time"
-
-	"appengine"
-	"golang.org/x/net/context"
-	"google.golang.org/cloud/storage"
 	"fmt"
+	"time"
+	"strconv"
+	"mime/multipart"
+	"golang.org/x/net/context"
+	"google.golang.org/appengine/log"
+	"google.golang.org/cloud/storage"
 	"github.com/keima/gae-go-uploader/goapp/settings"
 )
 
 // ファイルを保存し、/gs/で始まるファイルパスを返す
-func DirectStore(c appengine.Context, ctx context.Context, data []byte, fileHeader *multipart.FileHeader) (string, error) {
+func DirectStore(c context.Context, data []byte, fileHeader *multipart.FileHeader) (string, error) {
 	bucketName := settings.GCS_DEFAULT_BUCKET_NAME
 	fileName := generateFileName()
 
-	c.Infof("Save: /gs/%s/%s", bucketName, fileName)
+	log.Infof(c, "Save: /gs/%s/%s", bucketName, fileName)
 
-	wc := storage.NewWriter(ctx, bucketName, fileName)
+	client, err := storage.NewClient(c)
+	if err != nil {
+		return "", err
+	}
+
+	wc := client.Bucket(bucketName).Object(fileName).NewWriter(c)
 	wc.ContentType = fileHeader.Header.Get("Content-Type")
 	if _, err := wc.Write(data); err != nil {
 		return "", err
