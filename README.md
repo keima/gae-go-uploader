@@ -25,15 +25,13 @@ Live Reloadしながらfrontendを編集するには・・・
 4. `cd frontend`
 5. `gulp serve` (or `gulp` only)
 
-あとGCSを全面的に使うことになったので、以下のコマンドが必要。
-詳しくは https://cloud.google.com/appengine/docs/go/googlecloudstorageclient/getstarted#running_the_storage_example_locally
+あとGCSを全面的に使うことになったので、ローカルで検証するには以下のコマンドが必要。
+詳しくは https://cloud.google.com/appengine/docs/go/googlecloudstorageclient/sample-deploy-run#running_the_storage_example_locally
 
-```sh
-#!/bin/sh
-
-gcloud preview app run ./goapp/root/app.yaml \
---appidentity-email-address *****@developer.gserviceaccount.com \
---appidentity-private-key-path *****.pem
+```
+/path/to/AppEngSDK/dev_appserver.py . \
+--appidentity_email_address <your_app_email_address>@developer.gserviceaccount.com \
+--appidentity_private_key_path pem_file.pem
 ```
 
 
