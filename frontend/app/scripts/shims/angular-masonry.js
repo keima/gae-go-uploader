@@ -2,8 +2,12 @@
 
 var $ = require('jquery');
 require('jquery-bridget');
+
 var Masonry = require('masonry-layout');
+var ImagesLoaded = require('imagesloaded');
+
 $.bridget('masonry', Masonry);
+$.bridget('imagesLoaded', ImagesLoaded);
 
 require('imports?angular!angular-masonry');
 
@@ -13,7 +17,6 @@ require('imports?angular!angular-masonry');
 // require('get-size');
 // require('outlayer/item');
 // require('outlayer/outlayer');
-// require('imagesloaded');
 // require('angular');
 // require('angular-masonry');
 

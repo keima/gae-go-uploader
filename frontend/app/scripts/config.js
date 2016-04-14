@@ -10,7 +10,7 @@ angular.module(moduleName, [])
     RestangularProvider.setBaseUrl('/api/v1');
   })
   .config(function(ngClipProvider) {
-    ngClipProvider.setPath("libraries/ZeroClipboard.swf");
+    ngClipProvider.setPath("./ZeroClipboard.swf");
   });
 
 module.exports = moduleName;

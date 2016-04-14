@@ -4,9 +4,8 @@
 module.exports = function($window, $timeout, $scope, Upload, Restangular, $mdSidenav) {
   var self = this;
 
-  var fileReaderSupported = $window.FileReader != null && ($window.FileAPI == null || FileAPI.html5 != false);
-
   this.images = [];
+  this.files = [];
   this.isError = false;
 
   function init() {
@@ -35,8 +34,9 @@ module.exports = function($window, $timeout, $scope, Upload, Restangular, $mdSid
     $scope.upload = Upload.upload({
       url: '/api/upload',
       method: 'POST',
-      file: file,
-      fileFormDataName: 'imagedata'
+      data: {
+        imagedata: file
+      }
     }).progress(function(evt) {
       file.progress = parseInt(100.0 * evt.loaded / evt.total);
     }).success(function(data, status, headers, config) {

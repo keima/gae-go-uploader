@@ -1,5 +1,6 @@
 .layer-parent {
     position: relative;
+    margin: 10px 0;
 }
 
 .layer-parent div.hover {

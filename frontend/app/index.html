@@ -4,18 +4,20 @@
   <meta charset="UTF-8">
   <title ng-bind="appName">ʕ◔ϖ◔ʔ</title>
 
-  <meta name="viewport" content="initial-scale=1, maximum-scale=1"/>
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
   <meta name="robots" content="noindex,nofollow">
+
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
   <!-- build:vendorcss -->
   <link rel="stylesheet" href="../node_modules/angular-material/angular-material.css">
-  <link rel="stylesheet" href="../node_modules/components-font-awesome/css/font-awesome.css">
   <!-- endbuild -->
 
   <!-- build:css -->
   <!-- inject:css -->
   <link rel="stylesheet" href="styles/hover.css">
   <link rel="stylesheet" href="styles/menu.css">
+  <link rel="stylesheet" href="styles/thumbnail.css">
   <!-- endinject -->
   <!-- endbuild -->
 </head>
@@ -25,39 +27,45 @@
             md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')" layout-fill>
 
   <md-toolbar>
-    <h1 class="md-toolbar-tools" ng-bind="appName">The Uploader</h1>
+    <div class="md-toolbar-tools">
+      <h1 ng-bind="appName">The Uploader</h1>
+    </div>
   </md-toolbar>
 
-  <md-content class="md-padding" layout-fill>
-    <div ngf-drop ngf-select
-        class="md-whiteframe-z1"
-        style="height: 300px"
-        layout="column" layout-align="center center"
+  <md-content class="md-padding" layout-padding>
+    <div ngf-drop="" ngf-select=""
 
-        ng-model="ctrl.files"
-        ngf-multiple="false"
-        ngf-allow-dir="false"
-        ngf-accept="'image/*'"
-        >
-      <div>
+         md-whiteframe="1"
+         style="height: 300px"
+         layout="column" layout-align="center center"
+
+         ng-model="ctrl.files"
+         ngf-multiple="true"
+         ngf-keep="true"
+         ngf-allow-dir="false"
+         ngf-accept="'image/*'"
+    >
+      <div style="text-align: center;">
         ここにファイルを移動<br>
         もしくはクリックでファイル選択
       </div>
     </div>
 
-    <md-card class="layer-parent" layout layout-fill
-             ng-repeat="file in ctrl.files">
-      <div>
-        <img ngf-src="file" style="width: 100%;height:100%"/>
+    <md-card ng-repeat="file in ctrl.files"
+             class="layer-parent" layout layout-fill>
+
+      <div style="width: 100%; text-align: center;">
+        <img ngf-src="file" style="width: 100%;height:100%" />
       </div>
 
       <div class="hover" layout="row" layout-align="space-around center"
            style="width:100%;height: 100%">
         <div ng-show="!file.isUploading" layout="row" layout-align="space-around center">
-          <md-button class="md-fab md-warn" aria-label="Cancel"
+
+          <md-button class="md-fab md-warn md-hue-1" aria-label="Cancel"
                      ng-disabled="file.isUploading"
                      ng-click="ctrl.onCancel($index)">
-            <i class="fa fa-remove"></i>
+            <md-icon>close</md-icon>
             <md-tooltip>
               Cancel
             </md-tooltip>
@@ -66,11 +74,12 @@
           <md-button class="md-fab md-primary" aria-label="Upload"
                      ng-disabled="file.isUploading"
                      ng-click="ctrl.onUpload($index)">
-            <i class="fa fa-cloud-upload"></i>
+            <md-icon>cloud_upload</md-icon>
             <md-tooltip>
               Upload
             </md-tooltip>
           </md-button>
+
         </div>
 
         <md-progress-circular
@@ -86,13 +95,12 @@
 
 <div layout="column" layout-fill role="main">
 
-  <md-toolbar layout="column" hide-gt-sm>
-    <div class="md-toolbar-tools" ng-click="ctrl.openMenu()" flex layout="column">
-      <h1 layout="row" flex>
-        <button class="menu-icon" aria-label="Toggle Menu">
-          <i class="fa fa-bars" style="color: #ffffff"></i>
-        </button>
-
+  <md-toolbar hide-gt-sm>
+    <div class="md-toolbar-tools">
+      <md-button class="md-icon-button" aria-label="Open Menu" ng-click="ctrl.openMenu()">
+        <md-icon>menu</md-icon>
+      </md-button>
+      <h1>
         {{ appName }}
       </h1>
     </div>
@@ -103,13 +111,24 @@
     <div
         ng-show="ctrl.images.length > 0"
         ng-repeat="image in ctrl.images track by $index"
-        class="masonry-brick"
+        class="masonry-brick thumb-layer-parent"
         style="margin: 3px;">
 
-      <img ng-src="{{ image.url }}" alt="{{ image.fileName }}"
-           class="md-whiteframe-z2"
-           style="max-width: 300px"
-           clip-copy="image.url"/>
+      <a ng-href="{{  image.url }}" target="_blank">
+        <img ng-src="{{ image.url }}"
+             alt="{{ image.fileName }}"
+             class="md-whiteframe-z2"
+             style="max-width: 300px"
+             clip-copy="image.url" />
+      </a>
+
+      <div class="thumb-layer">
+
+        <md-button class="md-fab md-mini">
+          <md-icon>content_paste</md-icon>
+        </md-button>
+
+      </div>
 
     </div>
   </div>
