@@ -33,7 +33,7 @@ setting =
 
   copy: [
     "./app/favicon.ico",
-    "./node_modules/components-font-awesome/{fonts,_}/*"
+    "./node_modules/zeroclipboard/dist/ZeroClipboard.swf"
   ]
 
 ##################################
@@ -53,22 +53,24 @@ gulp.task "setWatch", ->
   setting.watching = true
 
 gulp.task 'watch', ["setWatch"], ->
-  gulp.watch setting.index, ["usemin"]
+  $.watch setting.index, (ev)->
+    gulp.start "usemin"
   .on "change", (changedFile) ->
-    $.util.log changedFile.path
+    $.util.log changedFile
     bs.reload
 
-  gulp.watch setting.css, ["inject"]
+  $.watch setting.css, (ev) ->
+    gulp.start "inject"
   .on "change", (changedFile) ->
-    $.util.log changedFile.path
-    gulp.src(changedFile.path)
-    .pipe bs.reload(stream: true)
+    $.util.log changedFile
+    gulp.src(changedFile).pipe bs.reload(stream: true)
 
-  gulp.watch setting.js, ["webpack"]
+  $.watch setting.js, (ev)->
+    $.util.log ev
+    gulp.start "webpack"
   .on "change", (changedFile) ->
-    $.util.log changedFile.path
+    $.util.log changedFile
     bs.reload
-
 
 gulp.task "browserify", ->
   b = browserify(
