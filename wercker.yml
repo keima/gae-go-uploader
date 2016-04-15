@@ -1,0 +1,29 @@
+box: node:4.2
+build:
+  steps:
+  - keima/go-appengine-util:
+      cwd: ./src/uploader/
+      method: get
+  - keima/go-appengine-util:
+      cwd: ./src/uploader/
+      method: test
+  - keima/go-appengine-util:
+      cwd: ./src/uploader/
+      method: build
+deploy:
+  steps:
+  # frontend setup
+  - npm-install:
+      cwd: ./frontend
+  - hgen/gulp:
+      tasks: build
+      cwd: ./frontend
+
+  # goapp and frontend deploy
+  - keima/go-appengine-util:
+      cwd: ./src/uploader/
+      method: get
+  - keima/go-appengine-util:
+      cwd: ./src/
+      method: deploy
+      token:  $APP_ENGINE_TOKEN
