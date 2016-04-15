@@ -2,9 +2,8 @@ package routes
 
 import (
 	"net/http"
-
-	"appengine"
-	"appengine/blobstore"
+	"google.golang.org/appengine"
+	"google.golang.org/appengine/blobstore"
 )
 
 // RedirectBlobStore is redirect BlobStore

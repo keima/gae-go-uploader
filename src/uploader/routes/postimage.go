@@ -4,31 +4,16 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
-
-	"appengine"
-	newappengine "google.golang.org/appengine"
-
-	"github.com/keima/gae-go-uploader/goapp/models"
-	"github.com/keima/gae-go-uploader/goapp/settings"
-	"appengine/urlfetch"
-	"google.golang.org/cloud/storage"
-	"golang.org/x/oauth2"
-	"golang.org/x/oauth2/google"
-	"google.golang.org/cloud"
+	"google.golang.org/appengine"
+	"google.golang.org/appengine/log"
+	"uploader/models"
+	"uploader/settings"
 )
 
 // PostImageHandler は画像アップロードを取り扱うハンドラー。
 // multipart/form-data を扱うため、go-json-restは使用しない
 func PostImageHandler(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
-	newc := newappengine.NewContext(r)
-	hc := &http.Client{
-		Transport: &oauth2.Transport{
-			Source: google.AppEngineTokenSource(newc, storage.ScopeFullControl),
-			Base:   &urlfetch.Transport{Context: c},
-		},
-	}
-	ctx := cloud.NewContext(appengine.AppID(c), hc)
 
 	w.Header().Set("Content-Type", "application/json")
 
@@ -43,7 +28,7 @@ func PostImageHandler(w http.ResponseWriter, r *http.Request) {
 
 	rawFile, fileHeader, err := r.FormFile("imagedata")
 	if err != nil {
-		c.Errorf("FormFile Error: %s", err.Error())
+		log.Errorf(c, "FormFile Error: %s", err.Error())
 		httpError(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -51,14 +36,14 @@ func PostImageHandler(w http.ResponseWriter, r *http.Request) {
 
 	data, err := ioutil.ReadAll(rawFile)
 	if err != nil {
-		c.Errorf("%s", err.Error())
+		log.Errorf(c, "%s", err.Error())
 		httpError(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	absFilename, err := DirectStore(c, ctx, data, fileHeader)
+	absFilename, err := DirectStore(c, data, fileHeader)
 	if err != nil {
-		c.Errorf("DirectStore: %s", err.Error())
+		log.Errorf(c, "DirectStore: %s", err.Error())
 		httpError(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

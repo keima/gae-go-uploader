@@ -1,16 +1,23 @@
-package root
+package uploader
 
 import (
 	"log"
 	"net/http"
-
-	"github.com/ant0ine/go-json-rest/rest"
-	"github.com/keima/gae-go-uploader/goapp/routes"
+	"uploader/routes"
+	"gopkg.in/ant0ine/go-json-rest.v3/rest"
+	"google.golang.org/appengine"
 )
 
 func init() {
 	api := rest.NewApi()
-	api.Use(rest.DefaultDevStack...)
+	var middlewares []rest.Middleware
+	if appengine.IsDevAppServer() {
+		middlewares = rest.DefaultDevStack
+	} else {
+		middlewares = rest.DefaultProdStack
+	}
+
+	api.Use(middlewares...)
 
 	//@formatter:off
 	router, err := rest.MakeRouter(

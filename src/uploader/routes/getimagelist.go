@@ -2,11 +2,9 @@ package routes
 
 import (
 	"net/http"
-
-	"github.com/ant0ine/go-json-rest/rest"
-	"github.com/keima/gae-go-uploader/goapp/models"
-
-	"appengine"
+	"uploader/models"
+	"gopkg.in/ant0ine/go-json-rest.v3/rest"
+	"google.golang.org/appengine"
 )
 
 func GetImageList(w rest.ResponseWriter, r *rest.Request) {

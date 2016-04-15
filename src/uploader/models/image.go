@@ -3,12 +3,10 @@ package models
 import (
 	"regexp"
 	"strconv"
-
-	"github.com/keima/gae-go-uploader/goapp/settings"
 	"github.com/knightso/base/gae/ds"
-
-	"appengine"
-	"appengine/datastore"
+	"google.golang.org/appengine/datastore"
+	"golang.org/x/net/context"
+	"uploader/settings"
 )
 
 const kindName = "Images"
@@ -24,13 +22,13 @@ type Image struct {
 	FileName string `datastore:"-" json:"fileName"`
 }
 
-func (item *Image) Save(c appengine.Context) error {
+func (item *Image) Save(c context.Context) error {
 	key := datastore.NewIncompleteKey(c, kindName, nil)
 	item.SetKey(key)
 	return ds.Put(c, item)
 }
 
-func (item *Image) Load(c appengine.Context, keyName string) error {
+func (item *Image) Load(c context.Context, keyName string) error {
 	key := datastore.NewKey(c, kindName, keyName, 0, nil)
 
 	if err := ds.Get(c, key, item); err != nil {
@@ -42,7 +40,7 @@ func (item *Image) Load(c appengine.Context, keyName string) error {
 	return nil
 }
 
-func LoadList(c appengine.Context, offset int, limit int) (*[]Image, error) {
+func LoadList(c context.Context, offset int, limit int) (*[]Image, error) {
 	items := make([]Image, 0, limit)
 	q := datastore.NewQuery(kindName).Order("-UpdatedAt").Offset(offset).Limit(limit)
 
@@ -61,7 +59,7 @@ func LoadList(c appengine.Context, offset int, limit int) (*[]Image, error) {
 
 // AbstractFilePath は filePath で与えられた /gs/... で始まるパスから、
 // 実際にアクセス可能なURLを返却します。
-func AbstractFilePath(c appengine.Context, filePath string) string {
+func AbstractFilePath(c context.Context, filePath string) string {
 	return settings.GCS_PUBLIC_ACCESS_PATH + fileName(filePath)
 }
 

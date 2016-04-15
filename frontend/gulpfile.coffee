@@ -1,82 +1,169 @@
 gulp = require "gulp"
+$ = require('gulp-load-plugins')() # injecting gulp-* plugin
 inject = require "gulp-inject"
-bower = require("bower-files")()
 runSequence = require "run-sequence"
-angularFileSort = require "gulp-angular-filesort"
-browserSync = require 'browser-sync'
-sort = require "sort-stream"
-debug = require 'gulp-debug'
+bs = require 'browser-sync'
+browserify = require 'browserify'
+watchify = require 'watchify'
+wpCore = require 'webpack'
+webpack = require 'webpack-stream'
+rimraf = require "rimraf"
+source = require 'vinyl-source-stream'
+
+##################################
+# Configuration
+##################################
 
 $app = "./app/"
+$dest = "../src/static/"
+
 setting =
-  src: $app
-  lib: $app + "libraries/"
-  font: $app + "fonts/"
+  index: $app + "index.html"
+  entriesjs: $app + "scripts/app.js"
+
+  outputjs: "app.build.js"
+  vendorcss: "vendor.css"
+  appcss: "app.css"
 
   html: $app + '**/*.html'
   js: $app + 'scripts/**/*.js'
   css: $app + 'styles/**/*.css'
+
+  watching: false
+
+  copy: [
+    "./app/favicon.ico",
+    "./node_modules/zeroclipboard/dist/ZeroClipboard.swf"
+  ]
 
 ##################################
 # Task
 ##################################
 
 gulp.task 'default', ['serve']
-gulp.task 'serve', ['browser-sync', 'watch']
+
+gulp.task 'serve', (cb) ->
+  runSequence "build", 'browser-sync', 'watch', cb
 
 gulp.task 'browser-sync', ->
-  # goapp serve してから
-  browserSync proxy: 'localhost:8080'
+# goapp serve してから
+  bs proxy: 'localhost:8080'
 
-gulp.task 'watch', ->
-  gulp.watch 'bower.json', ['bower-inject']
-  gulp.watch setting.html, [browserSync.reload]
-  gulp.watch setting.js, ["inject", browserSync.reload]
-  gulp.watch setting.css, ['css']
+gulp.task "setWatch", ->
+  setting.watching = true
 
-gulp.task 'css', ->
-  gulp.src(setting.css).pipe browserSync.reload(stream: true)
+gulp.task 'watch', ["setWatch"], ->
+  $.watch setting.index, (ev)->
+    gulp.start "usemin"
+  .on "change", (changedFile) ->
+    $.util.log changedFile
+    bs.reload
 
-gulp.task 'bower-inject', ->
-  runSequence 'bower', 'inject'
+  $.watch setting.css, (ev) ->
+    gulp.start "inject"
+  .on "change", (changedFile) ->
+    $.util.log changedFile
+    gulp.src(changedFile).pipe bs.reload(stream: true)
 
-gulp.task 'bower', ->
-  jsLib = bower.ext('js').files
-  cssLib = bower.ext('css').files
-  swfLib = bower.ext('swf').files
-  fontLib = bower.join({fonts: ['eot', 'woff', 'svg', 'ttf']}).files
+  $.watch setting.js, (ev)->
+    $.util.log ev
+    gulp.start "webpack"
+  .on "change", (changedFile) ->
+    $.util.log changedFile
+    bs.reload
 
-  gulp.src(jsLib)
-  .pipe debug()
-  .pipe gulp.dest(setting.lib)
-  gulp.src(cssLib).pipe gulp.dest(setting.lib)
-  gulp.src(swfLib).pipe gulp.dest(setting.lib)
-  gulp.src(fontLib).pipe gulp.dest(setting.font)
+gulp.task "browserify", ->
+  b = browserify(
+    entries: [setting.entriesjs]
+    cache: {}
+    packageCache: {}
+    fullPaths: false
+    debug: setting.watching
+  )
 
-gulp.task 'inject', ->
-  target = gulp.src(setting.src + 'index.html')
+  if setting.watching
+    b.plugin(watchify)
 
-  bowerComponents = bower.join({fonts: ['eot', 'woff', 'svg', 'ttf']})
+  bundle = ->
+    b.bundle()
+    .pipe source setting.outputjs
+    .pipe gulp.dest $dest
 
-  bowerJs = gulp.src(bowerComponents.ext('js').files)
-  bowerCss = gulp.src(bowerComponents.ext('css').files)
-  others = gulp.src [
-    setting.src + 'scripts/**/*.js',
-    setting.src + 'styles/**/*.css'
-  ]
+  if setting.watching
+    b.on "update", bundle
+    b.on "log", console.log
 
-  option = (name) ->
-    ret = {relative: true}
-    if name
-      ret.name = name
-    return ret
-
-  target
-  .pipe inject(bowerJs, option("bower"))
-  .pipe inject(bowerCss, option("bower"))
-  .pipe inject(others, option())
-  .pipe gulp.dest(setting.src)
+  bundle()
 
 
-gulp.task 'playground', ->
-  gulp.src bower()
+gulp.task "webpack", ->
+  wp = webpack(
+    output: {filename: setting.outputjs}
+    module: {
+      loaders: []
+    }
+    plugins: [
+      new wpCore.ProvidePlugin({
+        "window.jQuery": "jquery"
+      })
+    ]
+    devtool: 'source-map'
+  )
+
+  if setting.watching
+    wp.on "error", $.util.log
+
+  gulp.src setting.entriesjs
+  .pipe wp
+  .pipe gulp.dest $dest
+
+
+gulp.task "inject", ->
+  css = gulp.src setting.css, read: false
+
+  gulp.src setting.index
+  .pipe $.inject css, {ignorePath: 'app', addRootSlash: false}
+  .pipe gulp.dest $app
+
+gulp.task "usemin", ->
+  cssTask = (files, filename) ->
+    if files?
+      files.pipe $.pleeease(
+        import: false
+        rebaseUrls: false
+        autoprefixer: {browsers: ["last 4 versions", "ios 6", "android 4.0"]}
+        out: $dest + filename
+      )
+      .pipe $.concat(filename)
+  #      .pipe $.rev()
+
+  gulp.src setting.index
+  .pipe $.spa.html(
+    assetsDir: $app
+    pipelines:
+      main: (files) ->
+        if !setting.watching
+          files.pipe $.minifyHtml(empty: true, conditionals: true)
+        else
+          files
+      vendorcss: (files)->
+        cssTask files, setting.vendorcss
+      css: (files)->
+        cssTask files, setting.appcss
+  )
+  .pipe gulp.dest $dest
+
+gulp.task 'copy', ->
+  gulp.src setting.copy
+  .pipe gulp.dest $dest
+
+#gulp.task 'copyPartials', ->
+#  gulp.src config.partials, {base: config.dir}
+#  .pipe $.minifyHtml(empty: true)
+#  .pipe gulp.dest $dest
+
+gulp.task 'clean', (cb) ->
+  rimraf($dest, cb);
+
+gulp.task "build", (cb) ->
+  runSequence "clean", ["inject", "webpack"], "usemin", "copy", cb
