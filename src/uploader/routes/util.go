@@ -22,6 +22,7 @@ func DirectStore(c context.Context, data []byte, fileHeader *multipart.FileHeade
 	if err != nil {
 		return "", err
 	}
+	defer client.Close()
 
 	wc := client.Bucket(bucketName).Object(fileName).NewWriter(c)
 	wc.ContentType = fileHeader.Header.Get("Content-Type")
