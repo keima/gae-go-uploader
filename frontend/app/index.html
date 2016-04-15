@@ -3,16 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <title ng-bind="appName">ʕ◔ϖ◔ʔ</title>
-  <meta name="viewport" content="initial-scale=1, maximum-scale=1"/>
 
-  <!-- bower:css -->
-  <link rel="stylesheet" href="bower_components/angular-material/angular-material.css">
-  <link rel="stylesheet" href="bower_components/components-font-awesome/css/font-awesome.css">
-  <!-- endinject -->
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1"/>
+  <meta name="robots" content="noindex,nofollow">
+
+  <!-- build:vendorcss -->
+  <link rel="stylesheet" href="../node_modules/angular-material/angular-material.css">
+  <link rel="stylesheet" href="../node_modules/components-font-awesome/css/font-awesome.css">
+  <!-- endbuild -->
+
+  <!-- build:css -->
   <!-- inject:css -->
   <link rel="stylesheet" href="styles/hover.css">
   <link rel="stylesheet" href="styles/menu.css">
   <!-- endinject -->
+  <!-- endbuild -->
 </head>
 <body ng-controller="MainCtrl as ctrl" layout="row">
 
@@ -118,34 +123,7 @@
 
 </div>
 
-<!-- bower:js -->
-<script src="bower_components/jquery/dist/jquery.js"></script>
-<script src="bower_components/jquery-bridget/jquery.bridget.js"></script>
-<script src="bower_components/get-style-property/get-style-property.js"></script>
-<script src="bower_components/get-size/get-size.js"></script>
-<script src="bower_components/eventie/eventie.js"></script>
-<script src="bower_components/doc-ready/doc-ready.js"></script>
-<script src="bower_components/eventEmitter/EventEmitter.js"></script>
-<script src="bower_components/matches-selector/matches-selector.js"></script>
-<script src="bower_components/outlayer/item.js"></script>
-<script src="bower_components/outlayer/outlayer.js"></script>
-<script src="bower_components/masonry/masonry.js"></script>
-<script src="bower_components/angular/angular.js"></script>
-<script src="bower_components/imagesloaded/imagesloaded.js"></script>
-<script src="bower_components/angular-masonry/angular-masonry.js"></script>
-<script src="bower_components/ng-file-upload/ng-file-upload.js"></script>
-<script src="bower_components/angular-animate/angular-animate.js"></script>
-<script src="bower_components/angular-aria/angular-aria.js"></script>
-<script src="bower_components/angular-material/angular-material.js"></script>
-<script src="bower_components/lodash/lodash.js"></script>
-<script src="bower_components/restangular/dist/restangular.js"></script>
-<script src="bower_components/zeroclipboard/dist/ZeroClipboard.js"></script>
-<script src="bower_components/ng-clip/src/ngClip.js"></script>
-<!-- endinject -->
-
-<!-- inject:js -->
-<script src="scripts/app.js"></script>
-<!-- endinject -->
+<script src="app.build.js"></script>
 
 </body>
 </html>
