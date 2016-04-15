@@ -2,10 +2,8 @@ package routes
 
 import (
 	"net/http"
-
+	"uploader/models"
 	"gopkg.in/ant0ine/go-json-rest.v3/rest"
-	"github.com/keima/gae-go-uploader/goapp/models"
-
 	"google.golang.org/appengine"
 )
 

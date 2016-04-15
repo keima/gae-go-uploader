@@ -1,11 +1,10 @@
-package root
+package uploader
 
 import (
 	"log"
 	"net/http"
-
+	"uploader/routes"
 	"gopkg.in/ant0ine/go-json-rest.v3/rest"
-	"github.com/keima/gae-go-uploader/goapp/routes"
 	"google.golang.org/appengine"
 )
 

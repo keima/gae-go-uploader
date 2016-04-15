@@ -3,10 +3,10 @@ package models
 import (
 	"regexp"
 	"strconv"
-	"github.com/keima/gae-go-uploader/goapp/settings"
 	"github.com/knightso/base/gae/ds"
 	"google.golang.org/appengine/datastore"
 	"golang.org/x/net/context"
+	"uploader/settings"
 )
 
 const kindName = "Images"

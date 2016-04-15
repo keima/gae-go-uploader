@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"google.golang.org/appengine"
 	"google.golang.org/appengine/log"
-	"github.com/keima/gae-go-uploader/goapp/models"
-	"github.com/keima/gae-go-uploader/goapp/settings"
+	"uploader/models"
+	"uploader/settings"
 )
 
 // PostImageHandler は画像アップロードを取り扱うハンドラー。

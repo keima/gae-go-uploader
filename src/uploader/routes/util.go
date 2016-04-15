@@ -8,7 +8,7 @@ import (
 	"golang.org/x/net/context"
 	"google.golang.org/appengine/log"
 	"google.golang.org/cloud/storage"
-	"github.com/keima/gae-go-uploader/goapp/settings"
+	"uploader/settings"
 )
 
 // ファイルを保存し、/gs/で始まるファイルパスを返す
