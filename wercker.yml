@@ -4,12 +4,15 @@ build:
   - keima/go-appengine-util:
       cwd: ./src/uploader/
       method: get
+      gopath: $WERCKER_SOURCE_DIR
   - keima/go-appengine-util:
       cwd: ./src/uploader/
       method: test
+      gopath: $WERCKER_SOURCE_DIR
   - keima/go-appengine-util:
       cwd: ./src/uploader/
       method: build
+      gopath: $WERCKER_SOURCE_DIR
 deploy:
   steps:
   # frontend setup
@@ -23,7 +26,9 @@ deploy:
   - keima/go-appengine-util:
       cwd: ./src/uploader/
       method: get
+      gopath: $WERCKER_SOURCE_DIR
   - keima/go-appengine-util:
       cwd: ./src/
       method: deploy
+      gopath: $WERCKER_SOURCE_DIR
       token:  $APP_ENGINE_TOKEN
