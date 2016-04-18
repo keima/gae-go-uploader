@@ -97,8 +97,10 @@ gulp.task "browserify", ->
 
 
 gulp.task "webpack", ->
-  wp = webpack(
-    output: {filename: setting.outputjs}
+  opts = {
+    output: {
+      filename: setting.outputjs
+    }
     module: {
       loaders: []
     }
@@ -107,8 +109,10 @@ gulp.task "webpack", ->
         "window.jQuery": "jquery"
       })
     ]
-    devtool: 'source-map'
-  )
+  }
+  opts.devtool = 'source-map' if setting.watching
+
+  wp = webpack(opts)
 
   if setting.watching
     wp.on "error", $.util.log
