@@ -1,8 +1,12 @@
-module.exports = {
-    entry: "./src/index.tsx",
+import * as path from "path";
+import * as webpack from "webpack";
+
+const config: webpack.Configuration = {
+    entry: path.join(__dirname, "src", "./index.tsx"),
+
     output: {
-        filename: "bundle.js",
-        path: __dirname + "/dist"
+        path: path.join(__dirname, "static", "assets"),
+        filename: "bundle.js"
     },
 
     // Enable sourcemaps for debugging webpack's output.
@@ -10,7 +14,7 @@ module.exports = {
 
     resolve: {
         // Add '.ts' and '.tsx' as resolvable extensions.
-        extensions: [".ts", ".tsx", ".js", ".json"]
+        extensions: [".ts", ".tsx", ".js", ".jsx", ".json"]
     },
 
     module: {
@@ -27,8 +31,21 @@ module.exports = {
     // assume a corresponding global variable exists and use that instead.
     // This is important because it allows us to avoid bundling all of our
     // dependencies, which allows browsers to cache those libraries between builds.
-    externals: {
-        "react": "React",
-        "react-dom": "ReactDOM"
+    // externals: {
+    //     "react": "React",
+    //     "react-dom": "ReactDOM"
+    // },
+
+    // webpack-dev-server
+    devServer: {
+        publicPath: "/assets/",
+        contentBase: path.join(__dirname, "static"),
+        hot: true,
+        overlay: true,
+        watchContentBase: true,
+        port: 3000,
+        openPage: 'index.html'
     }
-};
+}
+
+export default config

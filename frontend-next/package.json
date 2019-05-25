@@ -3,19 +3,33 @@
   "version": "2.0.0",
   "private": true,
   "scripts": {
-    "build": "tsc"
+    "build": "webpack --mode production",
+    "watch": "webpack-dev-server",
+    "clean": "rimraf ./dist"
   },
   "dependencies": {
     "react": "^16.8.6",
     "react-dom": "^16.8.6"
   },
   "devDependencies": {
+    "@types/node": "^12.0.2",
     "@types/react": "^16.8.10",
     "@types/react-dom": "^16.8.3",
+    "@types/webpack": "^4.4.32",
+    "@types/webpack-dev-server": "^3.1.6",
+    "@types/webpack-env": "^1.13.9",
+    "@typescript-eslint/eslint-plugin": "^1.9.0",
     "awesome-typescript-loader": "^5.2.1",
+    "eslint": "^5.16.0",
+    "eslint-config-prettier": "^4.3.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "prettier": "^1.17.1",
+    "rimraf": "^2.6.3",
     "source-map-loader": "^0.2.4",
+    "ts-node": "^8.1.1",
     "typescript": "^3.4.1",
     "webpack": "^4.29.6",
-    "webpack-cli": "^3.3.0"
+    "webpack-cli": "^3.3.0",
+    "webpack-dev-server": "^3.4.1"
   }
 }

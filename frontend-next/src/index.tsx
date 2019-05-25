@@ -1,9 +1,19 @@
 import * as React from "react";
-import * as ReactDOM from "react-dom";
+import {render} from "react-dom";
+import App from "./App";
 
-import { Hello } from "./components/Hello";
+const rootEl = document.getElementById("example")
 
-ReactDOM.render(
-    <Hello compiler="TypeScript" framework="React" />,
-    document.getElementById("example")
-);
+render(
+    <App/>,
+    rootEl
+)
+
+if (module.hot) {
+    module.hot.accept('./App', () => {
+        render(
+            <App/>,
+            rootEl
+        )
+    })
+}
