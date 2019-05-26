@@ -6,7 +6,9 @@
     "prettier/@typescript-eslint"
   ],
   "plugins": [
-    "@typescript-eslint"
+    "prettier",
+    "@typescript-eslint",
+    "react-hooks"
   ],
   "parser": "@typescript-eslint/parser",
   "env": {
@@ -19,6 +21,13 @@
     "project": "./tsconfig.json"
   },
   "rules": {
-    "linebreak-style": "error"
+    "linebreak-style": "error",
+    "@typescript-eslint/explicit-function-return-type": "off",
+
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn"
   }
 }
