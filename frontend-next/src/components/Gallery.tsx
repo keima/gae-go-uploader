@@ -1,62 +1,30 @@
 import * as React from "react"
+import { useState } from "react"
 import { Image } from "../models/Image"
 import {
+  createStyles,
   GridList,
   GridListTile,
   GridListTileBar,
   Icon,
   IconButton,
+  makeStyles,
   Snackbar,
   Theme,
   withWidth,
 } from "@material-ui/core"
-import { ReactElement, useState } from "react"
-// import makeStyles from "@material-ui/core/styles/makeStyles"
-// import createStyles from "@material-ui/core/styles/createStyles"
-import useMediaQuery from "@material-ui/core/useMediaQuery"
-import useTheme from "@material-ui/core/styles/useTheme"
 import { isWidthUp, WithWidth } from "@material-ui/core/withWidth"
 import { Breakpoint } from "@material-ui/core/styles/createBreakpoints"
-//
-// const useStyles = makeStyles((theme: Theme) =>
-//   createStyles({
-//     icon: {
-//       color: "rgba(255, 255, 255, 0.54)",
-//     },
-//   })
-// )
+import TouchRipple from "@material-ui/core/ButtonBase/TouchRipple"
 
-const GalleryItem = (props: { image: Image }) => {
-  const { image } = props
-  const [showToast, setShowToast] = useState(false)
-
-  return (
-    <GridListTile cols={1}>
-      <img src={image.url} alt={image.fileName} />
-      <GridListTileBar
-        title={image.fileName}
-        subtitle={image.createdAt}
-        actionIcon={
-          <IconButton
-            onClick={async () => {
-              await navigator.clipboard.writeText(image.url)
-              setShowToast(true)
-            }}
-          >
-            <Icon>assignment</Icon>
-          </IconButton>
-        }
-      />
-      <Snackbar
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        open={showToast}
-        autoHideDuration={3000}
-        onClose={() => setShowToast(false)}
-        message={"Copied successfully"}
-      />
-    </GridListTile>
-  )
-}
+// @ts-ignore
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    icon: {
+      color: "rgba(255,255,255,0.76)",
+    },
+  })
+)
 
 interface GalleryProps {
   images: Image[]
@@ -83,15 +51,47 @@ const getGridListCols = (bp: Breakpoint) => {
 const Gallery = (props: Props) => {
   const width = props.width
   const cols = getGridListCols(width)
-
-  const childElements = props.images.map((image) => (
-    <GalleryItem image={image} key={image.id} />
-  ))
+  const classes = useStyles()
+  const [showToast, setShowToast] = useState(false)
 
   return (
-    <GridList cellHeight={160} cols={cols}>
-      {childElements}
-    </GridList>
+    <div>
+      <GridList cellHeight={250} cols={cols} spacing={8}>
+        {props.images.map((image) => (
+          <GridListTile
+            key={image.id}
+            cols={1}
+            onClick={() => {
+              window.open(image.url)
+            }}
+          >
+            <img src={image.url} alt={image.fileName} />
+            <GridListTileBar
+              title={image.fileName}
+              subtitle={image.createdAt}
+              actionIcon={
+                <IconButton
+                  className={classes.icon}
+                  onClick={async () => {
+                    await navigator.clipboard.writeText(image.url)
+                    setShowToast(true)
+                  }}
+                >
+                  <Icon>assignment</Icon>
+                </IconButton>
+              }
+            />
+          </GridListTile>
+        ))}
+      </GridList>
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        open={showToast}
+        autoHideDuration={3000}
+        onClose={() => setShowToast(false)}
+        message={"Copied successfully"}
+      />
+    </div>
   )
 }
 

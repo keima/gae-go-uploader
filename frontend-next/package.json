@@ -10,10 +10,10 @@
   "dependencies": {
     "@material-ui/core": "^4.0.0",
     "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "react-masonry-component": "^6.2.1"
+    "react-dom": "^16.8.6"
   },
   "devDependencies": {
+    "@babel/core": "^7.4.5",
     "@types/node": "^12.0.2",
     "@types/react": "^16.8.10",
     "@types/react-dom": "^16.8.3",
