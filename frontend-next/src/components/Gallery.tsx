@@ -10,15 +10,13 @@ import {
   IconButton,
   makeStyles,
   Snackbar,
-  Theme,
   withWidth,
 } from "@material-ui/core"
 import { isWidthUp, WithWidth } from "@material-ui/core/withWidth"
 import { Breakpoint } from "@material-ui/core/styles/createBreakpoints"
-import TouchRipple from "@material-ui/core/ButtonBase/TouchRipple"
 
 // @ts-ignore
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     icon: {
       color: "rgba(255,255,255,0.76)",
