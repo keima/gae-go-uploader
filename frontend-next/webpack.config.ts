@@ -45,6 +45,7 @@ const config: webpack.Configuration = {
     watchContentBase: true,
     port: 3000,
     host: "0.0.0.0",
+    https: true,
     openPage: "index.html",
   },
 }

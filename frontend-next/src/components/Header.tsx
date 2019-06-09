@@ -7,7 +7,7 @@ import Typography from "@material-ui/core/Typography"
 
 export function Header() {
   return (
-    <HideOnScroll>
+    <HideOnScroll effect="slide">
       <AppBar>
         <Toolbar>
           <Typography variant="h6">{APP_NAME}</Typography>

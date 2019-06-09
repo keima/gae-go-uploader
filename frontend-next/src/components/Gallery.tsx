@@ -15,7 +15,6 @@ import {
 import { isWidthUp, WithWidth } from "@material-ui/core/withWidth"
 import { Breakpoint } from "@material-ui/core/styles/createBreakpoints"
 
-// @ts-ignore
 const useStyles = makeStyles(() =>
   createStyles({
     icon: {
@@ -70,7 +69,8 @@ const Gallery = (props: Props) => {
               actionIcon={
                 <IconButton
                   className={classes.icon}
-                  onClick={async () => {
+                  onClick={async (event) => {
+                    event.stopPropagation()
                     await navigator.clipboard.writeText(image.url)
                     setShowToast(true)
                   }}

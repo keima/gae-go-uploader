@@ -1,6 +1,7 @@
 import * as React from "react"
 import { render } from "react-dom"
 import App from "./App"
+import { queryClipboardPermission } from "./queryClipboardPermission"
 
 const rootEl = document.getElementById("example")
 
@@ -11,3 +12,5 @@ if (module.hot) {
     render(<App />, rootEl)
   })
 }
+
+queryClipboardPermission()
